@@ -1,5 +1,6 @@
 @use 'src/styles/mixins' as *;
 @use 'src/styles/colors' as *;
+@use 'src/styles/general' as *;
 
 .form-wrapper {
     @include flexbox;
@@ -17,7 +18,8 @@
         margin: auto;
         background-color: white;
         padding: 2rem 1rem;
-        border-radius: 0.2rem;
+        border-radius: $border-radius;
+        border: 1px solid $grey-light;
 
         &-footer {
             margin-top: 3.5rem;

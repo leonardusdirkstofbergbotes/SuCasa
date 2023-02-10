@@ -1,5 +1,7 @@
 @use 'src/styles/mixins' as *;
 @use 'src/styles/colors' as *;
+@use 'src/styles/general' as *;
+
 
 .input {
     @include flexbox;
@@ -10,6 +12,7 @@
 
     label {
         font-size: 0.9rem;
+        width: fit-content;
 
         &.error {
             color: $error-light;
@@ -19,7 +22,7 @@
 
     input {
         height: 2.5rem;
-        border-radius: 0.2rem;
+        border-radius: $border-radius;
         font-size: 1.5rem;
         border: 1px solid $grey-light;
         padding: 0 0.5rem;

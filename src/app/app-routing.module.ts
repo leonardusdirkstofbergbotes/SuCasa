@@ -14,6 +14,9 @@ const routes: Routes = [{
 {
   path: 'register',
   loadChildren: () => import('./modules/Auth/register/register.module').then(m => m.RegisterModule),
+},{
+  path: 'forgot-password',
+  loadChildren: () => import('./modules/Auth/forgot/forgot.module').then(m => m.ForgotModule),
 }];
 
 @NgModule({

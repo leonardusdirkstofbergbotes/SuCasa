@@ -22,3 +22,48 @@ body {
         touch-action: none;
     }
 }
+
+h1 {
+    font-size: 2.5rem;
+}
+
+h2 {
+    font-size: 2.2rem;
+}
+
+h3 {
+    font-size: 2rem;
+}
+
+h4 {
+    font-size: 1.75rem;
+}
+
+h5 {
+    font-size: 1.5rem;
+}
+
+h6 {
+    font-size: 1.25rem;
+}
+
+
+a, button {
+    cursor: pointer;
+
+    &:disabled {
+        pointer-events: none;
+    }
+}
+
+a {
+    color: $primary;
+    text-decoration: none;
+}
+
+*:disabled { // all disabled INPUTS
+    background-color: var(--disabled-bg-color);
+    color: var(--disabled-font-color);
+    cursor: auto;
+    pointer-events: none;
+}

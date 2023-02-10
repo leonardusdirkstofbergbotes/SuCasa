@@ -1,0 +1,27 @@
+@use 'src/styles/mixins' as *;
+@use 'src/styles/colors' as *;
+
+.alternative-login {
+    margin-top: 3rem;
+}
+
+.to-register {
+    @include flexcenter;
+    margin-top: 2rem;
+    color: $secondary;
+}
+
+.password {
+    position: relative;
+
+    small {
+        position: absolute;
+        top: 0.5rem;
+        right: 0;
+        font-size: x-small;
+        
+        a {
+            color: $secondary;
+        }
+    }
+}

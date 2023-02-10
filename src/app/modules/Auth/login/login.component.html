@@ -1,0 +1,18 @@
+<app-form title="Home Services">
+    <div inputs>
+        <app-input label="Email" [control]="loginForm.controls['email']" type="email"></app-input>
+        <div class="password">
+            <app-input label="Password" [control]="loginForm.controls['password']" type="password"></app-input>
+            <small>
+                <a routerLink="/forgot-password">Forgot password?</a>
+            </small>
+        </div>
+    </div>
+
+    <div footer>
+        <app-button [loading]="loading" (click)="login()">Login</app-button>
+
+        <a routerLink="/register" class="to-register">Dont have an account yet?</a>
+    </div>
+
+</app-form>

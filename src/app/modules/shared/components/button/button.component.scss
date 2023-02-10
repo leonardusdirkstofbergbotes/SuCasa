@@ -1,5 +1,6 @@
 @use 'src/styles/mixins' as *;
 @use 'src/styles/colors' as *;
+@use 'src/styles/general' as *;
 
 button {
     @include transition(transform 0.15s ease-in-out, background-color 0.15s ease-in-out, color 0.3s ease-in-out);
@@ -8,7 +9,7 @@ button {
     outline: none;
     border: none;
     color: white;
-    border-radius: 0.2rem;
+    border-radius: $border-radius;
     padding: 0.8rem;
     cursor: pointer;
     position: relative;
