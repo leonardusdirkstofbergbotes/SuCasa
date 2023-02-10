@@ -1,0 +1,11 @@
+<div class="input">
+    <label [class.error]="control.invalid && control.touched">{{label}}</label>
+    <input [autocomplete]="!autocomplete ? 'off' : 'on'" [formControl]="control" [type]="type" [class.error]="control.invalid && control.touched"> 
+    <small *ngIf="control.invalid && control.touched">
+        <div *ngIf="control.hasError('required')">Please make sure this field above is filled in</div>
+        <div *ngIf="control.hasError('minlength')">This field needs to be at least {{ control.errors?.['minlength'].requiredLength }} characters long</div>
+        <div *ngIf="control.hasError('min')">The number above needs to more than or equal to {{ control.errors?.['min'].min }}</div>
+        <div *ngIf="control.hasError('email')">Please make sure to enter a valid email address</div>
+        <div *ngIf="control.hasError('custom')">{{ control.errors?.['custom'].message }}</div>
+    </small>
+</div>  

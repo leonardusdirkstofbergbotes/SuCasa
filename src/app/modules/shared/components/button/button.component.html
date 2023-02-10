@@ -1,0 +1,6 @@
+<button [class]="type" [disabled]="disabled" [class.busy-loading]="loading">
+    <div class="loader" [class.loading]="loading">
+        <i class="fa-solid fa-spinner"></i>
+    </div>
+    <ng-content></ng-content>
+</button>

@@ -1,0 +1,8 @@
+<div class="button-group">
+    <label>{{label}}</label>
+    <div class="options">
+        <div *ngFor="let option of options" class="item" [class.active]="option.Value == activeOption" (click)="setOption(option)">
+            {{option.Label}}
+        </div>
+    </div>
+</div>

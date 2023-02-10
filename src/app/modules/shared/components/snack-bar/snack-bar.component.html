@@ -1,0 +1,4 @@
+<div class="snackbar" *ngIf="alertInfo" [class]="alertInfo.type">
+    <span>{{ alertInfo.message }}</span>
+    <div class="snackbar__progress" [style.width.%]="progressBarWidth"></div>
+</div>

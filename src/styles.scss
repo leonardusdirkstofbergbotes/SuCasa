@@ -1,7 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
+@use 'src/styles/general';
+@use 'src/styles/mixins' as *;
+@use 'src/styles/colors' as *;
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 
 html, body {
     font-family: 'Open Sans', sans-serif;

@@ -1,0 +1,26 @@
+@use 'src/styles/mixins' as *;
+@use 'src/styles/colors' as *;
+
+.form-wrapper {
+    @include flexbox;
+    @include flex-direction(column);
+    @include align-items(center);
+    padding-bottom: 1rem;
+
+    h2 {
+        color: $primary;
+    }
+
+    .form {
+        @include shadow;
+        width: 85%;
+        margin: auto;
+        background-color: white;
+        padding: 2rem 1rem;
+        border-radius: 0.2rem;
+
+        &-footer {
+            margin-top: 3.5rem;
+        }
+    }
+}

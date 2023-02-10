@@ -1,0 +1,31 @@
+@use 'src/styles/mixins' as *;
+@use 'src/styles/colors' as *;
+
+.alternative-login {
+    @include flexcenter;
+    position: relative;
+
+    hr {
+        position: absolute;
+        width: 100%;
+        z-index: 1;
+        top: 0.8rem;
+    }
+
+    span {
+        background-color: white;
+        padding: 0.5rem;
+        position: relative;
+        z-index: 2;
+    }
+}
+
+.login-icons {
+    @include flexcenter;
+    margin-top: 1rem;
+
+    img {
+        width: 2rem;
+        margin: 0 1rem;
+    }
+}

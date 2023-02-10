@@ -1,0 +1,29 @@
+@use 'src/styles/mixins' as *;
+@use 'src/styles/colors' as *;
+
+.tab-wrapper {
+    margin-bottom: 3rem;
+
+    span {
+        font-size: 1.2rem;
+        font-weight: 700;
+    }
+    
+    .progress-wrapper {
+        position: relative;
+        width: 100%;
+        height: 1rem;
+        border-radius: 0.3rem;
+        background-color: $grey-light;
+    
+        .progress {
+            @include shadow;
+            @include transition(width 0.3s ease-in-out);
+            background-color: $secondary;
+            position: absolute;
+            left: 0;
+            height: 1rem;
+            border-radius: 0.2rem;
+        }
+    }
+}

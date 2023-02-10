@@ -1,0 +1,43 @@
+@use 'src/styles/mixins' as *;
+@use 'src/styles/colors' as *;
+
+.input {
+    @include flexbox;
+    @include flex-direction(column);
+    row-gap: 0.2rem;
+    margin-bottom: 2rem;
+    position: relative;
+
+    label {
+        font-size: 0.9rem;
+
+        &.error {
+            color: $error-light;
+            font-weight: bold;
+        }
+    }
+
+    input {
+        height: 2.5rem;
+        border-radius: 0.2rem;
+        font-size: 1.5rem;
+        border: 1px solid $grey-light;
+        padding: 0 0.5rem;
+
+        &:focus-visible {
+            outline: 1px solid $primary;
+            box-shadow: 0 0 4px $primary;
+        }
+
+        &.error {
+            border: 1px solid $secondary;
+        }
+    }
+
+    small {
+        position: absolute;
+        bottom: -1rem;
+        color: $secondary;
+        font-size: 0.7rem;
+    }
+}

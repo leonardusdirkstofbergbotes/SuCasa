@@ -1,0 +1,49 @@
+@use 'src/styles/mixins' as *;
+@use 'src/styles/colors' as *;
+
+.snackbar {
+    @include flexcenter;
+    @include shadow;
+    gap: 1rem;
+    position: fixed;
+    top: 1rem;
+    left: 0;
+    right: 0;
+    padding: 1rem;
+    border-radius: 0.3rem; 
+    max-width: 85%;
+    margin: auto;
+    background-color: white;
+
+    &.error {
+        border-left: 10px solid $error-light;
+    }
+
+    &.info {
+        border-left: 10px solid $info-light;
+        // background-image: linear-gradient(to right, $info , $info-light);
+    }
+
+    &.success {
+        border-left: 10px solid $success-light;
+        // background-image: linear-gradient(to right, $success , $success-light);
+    }
+
+    // background-image: linear-gradient(to right, $error , $error-light);
+
+
+    img {
+        width: 1.5rem;
+    }
+
+    &__progress {
+        height: 0.3rem;
+        background-image: linear-gradient(to right, white , rgb(197, 197, 197));
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        border-bottom-left-radius: 0.5rem;
+        border-bottom-right-radius: 0.5rem;
+        border-top-right-radius: 0.5rem;
+    }
+}

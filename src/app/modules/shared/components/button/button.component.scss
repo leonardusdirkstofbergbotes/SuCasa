@@ -1,0 +1,74 @@
+@use 'src/styles/mixins' as *;
+@use 'src/styles/colors' as *;
+
+button {
+    @include transition(transform 0.15s ease-in-out, background-color 0.15s ease-in-out, color 0.3s ease-in-out);
+    width: 100%;
+    font-size: 1.5rem;
+    outline: none;
+    border: none;
+    color: white;
+    border-radius: 0.2rem;
+    padding: 0.8rem;
+    cursor: pointer;
+    position: relative;
+
+    &.busy-loading {
+        color: transparent;
+        pointer-events: none;
+    }
+
+    &.primary {
+        background-color: $primary;
+    }
+
+    &.secondary {
+        background-color: $secondary;
+
+        &-outline {
+            background-color: transparent;
+            color: $secondary;
+            border: 1px solid $secondary;
+        }
+    }
+
+    &:active {
+        transform: scale(0.97);
+        background-color: darken($primary, 5%);
+    }
+
+    &:disabled {
+        pointer-events: none;
+        background-color: $grey-dark;
+    }
+
+    .loader {
+        @include flexcenter;
+        @include transition(color 0.3s ease-in-out);
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        visibility: hidden;
+        color: transparent;
+
+        i {
+            animation: spin 1s infinite linear;
+        }
+
+        &.loading {
+            visibility: visible;
+            color: white;
+        }
+    }
+}
+
+@keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+}
