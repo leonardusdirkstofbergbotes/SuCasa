@@ -1,0 +1,30 @@
+<h1>Categories</h1>
+
+<div>
+    <app-button (click)="newCategoryModal.open()">Create new category</app-button>
+</div>
+
+<app-modal title="Create new category" #newCategoryModal>
+    <div content>
+        <app-add-picture (fileChanged)="pictureChanged($event)"></app-add-picture>
+        <app-input label="Name" [control]="newCategoryForm.controls['name']" type="text"></app-input>
+        <app-input label="Description" [control]="newCategoryForm.controls['description']" type="textarea"></app-input>
+        <app-toggle-button label="Promote" [control]="newCategoryForm.controls['promote']"></app-toggle-button>
+    </div>
+    <div class="footer">
+        <app-button (click)="newCategoryModal.close()" type="outline-primary">Cancel</app-button>
+        <app-button (click)="createNewCategory()">Create</app-button>
+    </div>
+</app-modal>
+
+<div class="flex gap-4 justify-center categories">
+    <div *ngFor="let category of categories" class="item">
+        <img [src]="category.imageUrl" onerror="this.src='assets/icons/category-default.webp'" alt="image of category" />
+        <span>{{category.name}}</span>
+        <p>{{category.description}}</p>
+    </div>
+
+    <div *ngIf="loading" class="categories__loading text-6xl">
+        <i class="fa-solid fa-spinner text-sky-600 animate-spin"></i>
+    </div>
+</div>

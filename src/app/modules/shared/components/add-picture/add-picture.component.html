@@ -1,0 +1,5 @@
+<div class="picture">
+    <img src="assets/icons/category-default.webp" *ngIf="profilePicturePreviewUrl === ''" (click)="profilePictureInput.click()" alt="defualt category image">
+    <img [src]="profilePicturePreviewUrl" alt="your custom profile picture" class="imagePreview" (click)="profilePictureInput.click()" *ngIf="profilePicturePreviewUrl && profilePicturePreviewUrl != ''">
+    <input accept="image/*" (change)="createPreviewUrl($event)" type="file" #profilePictureInput>
+</div>

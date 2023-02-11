@@ -1,6 +1,9 @@
 <div class="input">
     <label [class.error]="control.invalid && control.touched">{{label}}</label>
-    <input [autocomplete]="!autocomplete ? 'off' : 'on'" [formControl]="control" [type]="type" [class.error]="control.invalid && control.touched"> 
+    <input *ngIf="type != 'textarea'" [autocomplete]="!autocomplete ? 'off' : 'on'" [formControl]="control" [type]="type" [class.error]="control.invalid && control.touched"> 
+    <textarea rows="2" *ngIf="type == 'textarea'" [autocomplete]="!autocomplete ? 'off' : 'on'" [formControl]="control" [class.error]="control.invalid && control.touched">
+
+    </textarea>
     <small *ngIf="control.invalid && control.touched">
         <div *ngIf="control.hasError('required')">Please make sure this field above is filled in</div>
         <div *ngIf="control.hasError('minlength')">This field needs to be at least {{ control.errors?.['minlength'].requiredLength }} characters long</div>

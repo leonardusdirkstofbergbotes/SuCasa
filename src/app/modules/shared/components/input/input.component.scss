@@ -20,7 +20,7 @@
         }
     }
 
-    input {
+    input, textarea {
         height: 2.5rem;
         border-radius: $border-radius;
         font-size: 1.5rem;
@@ -35,6 +35,10 @@
         &.error {
             border: 1px solid $secondary;
         }
+    }
+
+    textarea {
+        height: auto;
     }
 
     small {

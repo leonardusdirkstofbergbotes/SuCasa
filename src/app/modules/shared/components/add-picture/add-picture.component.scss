@@ -1,0 +1,17 @@
+@use 'src/styles/mixins' as *;
+@use 'src/styles/colors' as *;
+
+.picture {
+    @include flexcenter;
+    margin-bottom: 1.5rem;
+    position: relative;
+    
+    img {
+        max-width: 10rem;
+        max-height: 10rem;
+    }
+
+    input[type=file] {
+        display: none;
+    }
+}

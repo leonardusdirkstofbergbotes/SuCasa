@@ -1,0 +1,11 @@
+<div class="modal__wrapper" [class.open]="showModal">
+    <div class="modal">
+        <div class="modal__title">{{title}}</div>
+        <div class="modal__content">
+            <ng-content [select]="content"></ng-content>
+        </div>
+        <div class="modal__footer">
+            <ng-content select=".footer"></ng-content>
+        </div>
+    </div>
+</div>

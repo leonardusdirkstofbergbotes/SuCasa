@@ -8,7 +8,7 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, Go
 })
 export class AuthService {
 
-  constructor(private router: Router, private SnackBarService: SnackBarService) { }
+  constructor(private SnackBarService: SnackBarService) { }
 
   registerNewUser(email: string, password: string) {
     const auth = getAuth();

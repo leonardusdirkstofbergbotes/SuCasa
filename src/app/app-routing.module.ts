@@ -17,6 +17,9 @@ const routes: Routes = [{
 },{
   path: 'forgot-password',
   loadChildren: () => import('./modules/Auth/forgot/forgot.module').then(m => m.ForgotModule),
+},{
+  path: 'admin',
+  loadChildren: () => import('./modules/Admin/admin.module').then(m => m.AdminModule),
 }];
 
 @NgModule({

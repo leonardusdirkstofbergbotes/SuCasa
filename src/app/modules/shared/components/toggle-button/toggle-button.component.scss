@@ -1,0 +1,56 @@
+@use 'src/styles/mixins' as *;
+@use 'src/styles/colors' as *;
+@use 'src/styles/general' as *;
+
+label {
+    font-size: 0.9rem;
+    width: fit-content;
+
+    &.error {
+        color: $error-light;
+        font-weight: bold;
+    }
+}
+
+.toggle {
+    @include flexbox;
+    @include align-items(center);
+    position: relative;
+    background-color: $grey-subtle;
+    width: 3rem;
+    height: 1.5rem;
+    border-radius: 2rem;
+    border: 1px solid $primary-light;
+    padding: 0.2rem;
+
+    &__wrapper {
+        position: relative;
+
+        small {
+            position: absolute;
+            bottom: -1rem;
+            color: $secondary;
+            font-size: 0.7rem;
+        }
+    }
+
+    &.active {
+        background-color: white;
+        border: 1px solid $primary;
+    }
+
+    .switch {
+        @include transition(background-color 0.3s ease-in-out, transform 0.3s ease-in-out);
+        height: 1.2rem;
+        width: 1.2rem;
+        border: 1px solid $primary-light;
+        border-radius: 100%;
+        background-color: $primary-light;
+        transform: translateX(0);
+
+        &.active {
+            background-color: $primary;
+            transform: translateX(1.35rem);
+        }
+    }
+}

@@ -1,0 +1,11 @@
+<div class="toggle__wrapper">
+    <label [class.error]="control.invalid && control.touched">{{label}}</label>
+    <div class="toggle" (click)="toggleSwitch()" [class.active]="control.value">
+        <div class="switch" [class.active]="control.value"></div>
+        <input type="hidden" [formControl]="control" />
+    </div>
+    <small *ngIf="control.invalid && control.touched">
+        <div *ngIf="control.hasError('required')">Please make sure this field above is filled in</div>
+        <div *ngIf="control.hasError('custom')">{{ control.errors?.['custom'].message }}</div>
+    </small> 
+</div>

@@ -9,6 +9,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ModalComponent } from './components/modal/modal.component';
+import { AddPictureComponent } from './components/add-picture/add-picture.component';
+import { ToggleButtonComponent } from './components/toggle-button/toggle-button.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +21,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     FormTabsComponent,
     ButtonGroupComponent,
     SnackBarComponent,
+    ModalComponent,
+    AddPictureComponent,
+    ToggleButtonComponent,
   ],
   imports: [
     CommonModule,
@@ -34,6 +40,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     FormTabsComponent,
     ButtonGroupComponent,
     SnackBarComponent,
+    ModalComponent,
+    AddPictureComponent,
+    ToggleButtonComponent
   ]
 })
 export class SharedModule { }

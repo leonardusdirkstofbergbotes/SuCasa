@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { Component } from '@angular/core';
 import { AuthService } from '../../shared/services/auth.service';
@@ -16,12 +17,14 @@ export class LoginComponent {
 
   loading: boolean = false;
 
-  constructor(private authService: AuthService) { }
+  constructor(private router: Router, private authService: AuthService) { }
 
-  login () {
+  async login () {
     if (this.loginForm.valid) {
       this.loading = true;
-      this.authService.loginWithEmailAndPassword(this.loginForm.controls['email'].value, this.loginForm.controls['password'].value);
+      await this.authService.loginWithEmailAndPassword(this.loginForm.controls['email'].value, this.loginForm.controls['password'].value);
+
+      if (this.loginForm.value == 'leonardusdirkstofbergbotes@gmail.com') this.router.navigate(['/admin/categories']);
     }
     else this.loginForm.markAllAsTouched();
     

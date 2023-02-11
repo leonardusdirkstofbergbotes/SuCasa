@@ -7,7 +7,7 @@ import { Component, Input } from '@angular/core';
 })
 export class ButtonComponent {
 
-  @Input() type: string = 'primary'; // primary|secondary
+  @Input() type: string = 'primary'; // primary|secondary|outline-primary|outline-secondary
   @Input() loading: boolean = false;
   @Input() disabled: boolean = false;
 
