@@ -17,9 +17,9 @@
     </div>
 </app-modal>
 
-<div class="flex gap-4 justify-center categories">
+<div class="flex flex-wrap gap-4 justify-center categories">
     <div *ngFor="let category of categories" class="item">
-        <img [src]="category.imageUrl" onerror="this.src='assets/icons/category-default.webp'" alt="image of category" />
+        <img [src]="category.imagePath" alt="image of category" />
         <span>{{category.name}}</span>
         <p>{{category.description}}</p>
     </div>
