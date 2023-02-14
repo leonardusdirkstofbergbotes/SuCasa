@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { Address } from 'src/app/models/address';
-import { KEYS } from 'src/app/configs/keys';
+import { OPENMAP } from 'src/app/configs/keys';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +34,7 @@ export class GeolocationService {
   }
 
   getGeocodes (address: string) {
-    let link = `http://www.mapquestapi.com/geocoding/v1/address?key=${KEYS.Map}&location=${address}`;
+    let link = `http://www.mapquestapi.com/geocoding/v1/address?key=${OPENMAP.Key}&location=${address}`;
 
     this.http.get(link).subscribe((locationInfo: any) => {
       let locationDetails = locationInfo.results[0].locations[0];
@@ -57,7 +57,7 @@ export class GeolocationService {
   }
 
   processLocation (location: GeolocationPosition) {
-    let link = `https://www.mapquestapi.com/geocoding/v1/reverse?key=${KEYS.Map}&location=${location.coords.latitude},${location.coords.longitude}`;
+    let link = `https://www.mapquestapi.com/geocoding/v1/reverse?key=${OPENMAP.Key}&location=${location.coords.latitude},${location.coords.longitude}`;
 
     this.http.get(link).subscribe((locationInfo: any) => {
       let locationDetails = locationInfo.results[0].locations[0];
@@ -79,7 +79,7 @@ export class GeolocationService {
   }
 
   getMapOfLocation (latitude: number, longitude: number, zoom: number = 9) {
-    let link = `https://www.mapquestapi.com/staticmap/v5/map?key=${KEYS.Map}&center=${latitude},${longitude}&size=300,300&zoom=${zoom}`;
+    let link = `https://www.mapquestapi.com/staticmap/v5/map?key=${OPENMAP.Key}&center=${latitude},${longitude}&size=300,300&zoom=${zoom}`;
 
     this.http.get(link, { responseType: 'blob' }).subscribe((mapData: any) => {
       this.locationMap$.next(mapData);
