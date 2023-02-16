@@ -10,6 +10,7 @@
         <div *ngIf="control.hasError('maxlength')">This field needs to be less than {{ control.errors?.['maxlength'].requiredLength }} characters long</div>
         <div *ngIf="control.hasError('min')">The number above needs to more than or equal to {{ control.errors?.['min'].min }}</div>
         <div *ngIf="control.hasError('email')">Please make sure to enter a valid email address</div>
+        <div *ngIf="control.hasError('notUnique')">Please make sure to enter a unique value</div>
         <div *ngIf="control.hasError('custom')">{{ control.errors?.['custom'].message }}</div>
     </small>
 </div>  

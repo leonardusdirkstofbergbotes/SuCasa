@@ -1,7 +1,7 @@
 import { ImageUploadService } from './image-upload.service';
 import { DefaultImages } from './../../../enums/DefaultImages';
 import { Injectable } from '@angular/core';
-import { getDatabase, ref, set, get, child } from 'firebase/database';
+import { getDatabase, ref, set, get, child, remove } from 'firebase/database';
 import { Category } from 'src/app/models/category';
 
 @Injectable({
@@ -43,9 +43,11 @@ export class CategoryService {
         if (snapshot.exists()) {
           const categoryDetails = {...snapshot.val(), uid: categoryId};
 
-          await this.imageUploaderService.downloadImageFromPath(categoryDetails.imagePath).then(downloadUrl => {
-            categoryDetails.imagePath = downloadUrl;
-          });
+          if (categoryDetails.imagePath) {
+            await this.imageUploaderService.downloadImageFromPath(categoryDetails.imagePath).then(downloadUrl => {
+              categoryDetails.imagePath = downloadUrl;
+            });
+          }
 
           resolve(categoryDetails);
         } else {
@@ -55,6 +57,10 @@ export class CategoryService {
         reject(error);
       });
     });
+  }
+
+  deleteCategory (categoryId: string) {
+    return remove(ref(this.db, `categories/${categoryId}`));
   }
 
   formatCategories(categories: any): Category[] {

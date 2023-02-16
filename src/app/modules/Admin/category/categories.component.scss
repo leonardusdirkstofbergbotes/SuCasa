@@ -29,6 +29,16 @@
             overflow: hidden;
         }
 
+        .delete {
+            @include transition(background-color 0.1s ease-in-out, color 0.1s ease-in-out);
+            border-bottom: $border-radius;
+
+            &:active {
+                background-color: $secondary;
+                color: white;
+            }
+        }
+
         &:active {
             @include shadow;
             transform: scale(0.97);

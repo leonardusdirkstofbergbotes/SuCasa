@@ -1,3 +1,4 @@
+import { get } from 'firebase/database';
 import { ImageFolders } from './../../../enums/ImageFolder';
 import { ImageUploadService } from './../../shared/services/image-upload.service';
 import { SnackBarService } from './../../shared/components/snack-bar/snack-bar.service';
@@ -58,7 +59,6 @@ export class CategoriesComponent implements OnInit {
   }
 
   pictureChanged (file: File) {
-    console.log(file);
     this.pictureToSave = file;
   }
 
@@ -125,7 +125,9 @@ export class CategoriesComponent implements OnInit {
       if (this.isCategoryNameUnique()) {
         return true;
       }
-      else this.snackbarService.showMessage("This category name already exists", AlertTypes.ERROR);
+      else this.categoryForm.get('name')?.setErrors({
+        notUnique: true
+      })
     }
     else this.categoryForm.markAllAsTouched();
 
@@ -143,12 +145,27 @@ export class CategoriesComponent implements OnInit {
         reject(error);
       })
     })
-    
+  }
+
+  async deleteCategory (categoryId: string) {
+    const confirmDelete = confirm("Are you sure you want to delete this category");
+
+    this.fetchingInitialData = true;
+    if (confirmDelete) {
+      await this.categoryService.deleteCategory(categoryId).then(() => {
+        this.refresh();
+      });
+    }
+
+    this.fetchingInitialData = false;
   }
 
   isCategoryNameUnique () {
+    if (this.editCategoryId != null) return true;
+    
     return this.categories.find((category: Category) => {
-      return category.name == this.categoryForm.value;
+      console.log(this.categoryForm.value);
+      return category.name == this.categoryForm.get('name')?.value;
     }) == undefined;
   }
 

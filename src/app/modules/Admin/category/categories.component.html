@@ -19,12 +19,17 @@
 </app-modal>
 
 <div class="grid grid-cols-2 gap-6 categories">
-    <div *ngFor="let category of categories" class="item" (click)="editCategory(category.uid)">
-        <img [src]="category.imagePath" alt="image of category" />
-        <div class="flex flex-col p-1 mt-4">
-            <span class="title">{{category.name}}</span>
-            <small class="mt-2 description">{{category.description}}</small>
+    <div *ngFor="let category of categories" class="item">
+        <div (click)="editCategory(category.uid)">
+            <img [src]="category.imagePath" alt="image of category" />
+            <div class="flex flex-col p-1 mt-4">
+                <span class="title">{{category.name}}</span>
+                <small class="mt-2 description">{{category.description}}</small>
+            </div>
+        </div>
+        <div (click)="deleteCategory(category.uid)" class="delete text-center text-red-600 p-2 border-t-2 border-grey-200 mt-2">
+            Delete
         </div>
     </div>
-    
+
 </div>
