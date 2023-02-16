@@ -20,7 +20,25 @@
     </div>
 </app-modal>
 
-<div class="grid grid-cols-2 gap-6 categories">
+<!-- Skeleton loader -->
+<div class="grid grid-cols-2 gap-6 categories mt-2 skeleton-loader" *ngIf="fetchingInitialData">
+    <div *ngFor="let category of [1, 2, 3, 4]" class="item">
+        <div class="loader"></div>
+        <div>
+            <img src="assets/icons/category-default.webp" alt="image of category" />
+            <div class="flex flex-col p-1 mt-4">
+                <span class="title">dummy</span>
+                <small class="mt-2 description">dummy</small>
+            </div>
+        </div>
+        <div class="delete text-center text-red-600 p-2 border-t-2 border-grey-200 mt-2">
+            dummy
+        </div>
+    </div>
+</div>
+<!-- Skeleton loader ENDS -->
+
+<div class="grid grid-cols-2 gap-6 categories mt-2">
     <div *ngFor="let category of categories" class="item">
         <div (click)="editCategory(category.uid)">
             <img [src]="category.imagePath" alt="image of category" />
@@ -33,5 +51,10 @@
             Delete
         </div>
     </div>
-
 </div>
+
+<div *ngIf="!fetchingInitialData && categories.length == 0">
+    There are no categories at this time
+</div>
+
+

@@ -57,6 +57,30 @@
         left: 0;
         right: 0;
     }
+
+    &.skeleton-loader {
+        .item {
+            position: relative;
+            overflow-y: hidden;
+
+            .loader {
+                height: 30%;
+                width: 100%;
+                background-color: rgb(204 204 204 / 38%);
+                background-image: linear-gradient(rgba(252, 252, 252, 0.503), rgba(220, 220, 220, 0.235));
+                position: absolute;
+                animation: skeleton-loader 1.3s infinite linear;
+            }
+
+            img {
+                opacity: 0.2;
+            }
+            .title, .description, .delete {
+                background-color: $grey-light;
+                color: transparent;
+            }
+        }
+    }
 }
 
 .footer {
@@ -64,3 +88,17 @@
     @include justify-content(space-between);
     @include align-items(center);
 }
+
+@keyframes skeleton-loader {
+    0% {
+        opacity: 0.1;
+        transform: translateY(-7rem);
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.2;
+        transform: translateY(15rem);
+    }
+  }
