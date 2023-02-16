@@ -40,10 +40,22 @@
     }
 
     &__content {
+        position: relative;
         padding: 1rem;
         background-color: white;
         max-height: 70vh;
         overflow-y: auto;
+
+        .loading-indicator {
+            @include flexcenter;
+            position:  absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            background-color: $grey-subtle-transparent;
+            z-index: 2;
+        }
     }
 
     &__footer {

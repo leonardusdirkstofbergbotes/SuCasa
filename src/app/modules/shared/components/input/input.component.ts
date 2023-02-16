@@ -15,4 +15,5 @@ export class InputComponent {
   @Input() tooltip: string | null = null;
   @Input() type: string = "text";
   @Input() autocomplete: boolean = false;
+  @Input() rows: number = 2;
 }

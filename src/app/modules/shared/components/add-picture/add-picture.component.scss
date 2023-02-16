@@ -7,8 +7,9 @@
     position: relative;
     
     img {
-        max-width: 10rem;
-        max-height: 10rem;
+        width: 10rem;
+        height: 10rem;
+        background-size: cover;
     }
 
     input[type=file] {

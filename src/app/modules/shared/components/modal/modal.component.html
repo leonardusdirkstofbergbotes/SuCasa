@@ -2,6 +2,9 @@
     <div class="modal">
         <div class="modal__title">{{title}}</div>
         <div class="modal__content">
+            <div class="loading-indicator" *ngIf="loading">
+                <i class="fa-solid fa-spinner text-sky-500 text-6xl animate-spin"></i>
+            </div>
             <ng-content [select]="content"></ng-content>
         </div>
         <div class="modal__footer">

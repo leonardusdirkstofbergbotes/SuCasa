@@ -18,6 +18,10 @@ export class CategoryService {
     return set(ref(this.db, 'categories/' + uniqueId), formValues);
   }
 
+  updateCategory(categoryId: string, formValues: Category): Promise<void> {
+    return set(ref(this.db, `categories/${categoryId}`), formValues);
+  }
+
   getAllCategories (): Promise<Category[]> {
     return new Promise((resolve, reject) => {
       get(child(ref(this.db), 'categories/')).then((snapshot) => {
@@ -31,6 +35,26 @@ export class CategoryService {
         reject(error);
       });
     })
+  }
+
+  getCategory (categoryId: string): Promise<Category | null> {
+    return new Promise((resolve, reject) => {
+      get(child(ref(this.db), `categories/${categoryId}`)).then(async (snapshot) => {
+        if (snapshot.exists()) {
+          const categoryDetails = {...snapshot.val(), uid: categoryId};
+
+          await this.imageUploaderService.downloadImageFromPath(categoryDetails.imagePath).then(downloadUrl => {
+            categoryDetails.imagePath = downloadUrl;
+          });
+
+          resolve(categoryDetails);
+        } else {
+          resolve(null);
+        }
+      }).catch((error) => {
+        reject(error);
+      });
+    });
   }
 
   formatCategories(categories: any): Category[] {

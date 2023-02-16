@@ -1,9 +1,9 @@
 import { DeliveryMethod } from './../../../enums/DeliveryMethod';
 import { MealForWhatsApp } from './../../../models/mealForWhatsApp';
-import { WHATSAPP } from 'src/app/configs/keys';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { WhatsAppCTA } from 'src/app/enums/WhatsappCTA';
+import { WHATSAPP } from 'src/app/configs/keys';
+import { WhatsAppCTA } from 'src/app/enums/WhatsAppCTA';
 
 @Injectable({
   providedIn: 'root',

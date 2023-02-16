@@ -15,11 +15,14 @@ import { AlertTypes } from 'src/app/enums/AlertTypes';
 })
 export class CategoriesComponent implements OnInit {
   
-  @ViewChild('newCategoryModal') newCategoryModal!: ModalComponent; 
+  @ViewChild('categoryModal') categoryModal!: ModalComponent; 
 
-  loading: boolean = false;
+  fetchingFormInfo: boolean = false;
+  fetchingInitialData: boolean = false;
+  processingInput: boolean = false;
+
   categories: Category[] = [];
-  newCategoryForm: FormGroup = new FormGroup({
+  categoryForm: FormGroup = new FormGroup({
     name: new FormControl("", [Validators.required, Validators.minLength(2), Validators.maxLength(20)]),
     description: new FormControl("", [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
     imagePath: new FormControl(null, [Validators.maxLength(1000)]),
@@ -29,7 +32,8 @@ export class CategoriesComponent implements OnInit {
     promote: new FormControl(false, [Validators.required])
   });
 
-  pictureToSave!: File;
+  editCategoryId: string | null = null;
+  pictureToSave: File | null = null;
 
   constructor (
     private categoryService: CategoryService,
@@ -42,7 +46,7 @@ export class CategoriesComponent implements OnInit {
   } 
 
   async getCategories () {
-    this.loading = true;
+    this.fetchingInitialData = true;
     await this.categoryService.getAllCategories().then((categories: Category[]) => {
       this.categories = categories;
       console.log(this.categories);
@@ -50,42 +54,115 @@ export class CategoriesComponent implements OnInit {
       console.log(error);
     });
 
-    this.loading = false;
+    this.fetchingInitialData = false;
   }
 
   pictureChanged (file: File) {
+    console.log(file);
     this.pictureToSave = file;
   }
 
   async createNewCategory () {
-    if (this.newCategoryForm.valid) {
-      this.loading = true;
-
-      // first check if name doesnt already exist
-      if (this.categories.find((category: Category) => {
-        return category.name == this.newCategoryForm.value;
-      }) == undefined) {       
-        // add picture to firebase storage and reference the path
-        await this.imageUploadService.uploadImageToFolder(ImageFolders.CATEGORIES, this.pictureToSave).then((storageInfo) => {          
-          this.newCategoryForm.patchValue({
+    this.processingInput = true;
+    if (this.isFormValid()) {
+      if (this.pictureToSave != null) {
+        await this.uploadImage().then(storageInfo => {
+          this.categoryForm.patchValue({
             imagePath: storageInfo.metadata.fullPath
-         });
-        }).catch(error => {
-          console.log(error);
-        })
-
-        await this.categoryService.createNewCategory(this.newCategoryForm.value).then(() => {
-          // the categories Array needs to be updated (hopefully without a DB query)
-
-          this.newCategoryModal?.close();
-        }).catch((error) => {
-          console.log('error occured');
+          });
         });
       }
-      else this.snackbarService.showMessage("This category name already exists", AlertTypes.ERROR);      
-    } 
 
-    else this.newCategoryForm.markAllAsTouched();
-    this.loading = false;
+      await this.categoryService.createNewCategory(this.categoryForm.value).then(() => {
+        this.refresh();
+      }).catch((error) => {
+        console.log('error occured');
+      });
+    }
+    else this.processingInput = false;
+  }
+
+  editCategory(categoryId: string) {
+    // this.categoryForm.reset();
+    this.categoryModal.open();
+    this.fetchingFormInfo = true;
+
+    this.categoryService.getCategory(categoryId).then((category: Category | null) => {
+      if (category == null) {
+        this.snackbarService.showMessage("We could not find the category", AlertTypes.ERROR);
+        return;
+      }
+
+      this.editCategoryId = categoryId;
+      this.categoryForm.patchValue(category);
+      this.fetchingFormInfo = false;
+    });
+  }
+
+  async updateCategory () {
+    this.processingInput = true;
+    if (this.isFormValid()) {
+      // check if image has been updated
+      if (this.pictureToSave != null) {
+        await this.uploadImage().then(storageInfo => {
+          this.categoryForm.patchValue({
+            imagePath: storageInfo.metadata.fullPath
+          });
+        });
+      }
+
+      await this.categoryService.updateCategory(this.editCategoryId as string, this.categoryForm.value).then(() => {
+        this.refresh();
+      }).catch((error) => {
+        console.log('error occured');
+      });
+    }
+    else this.processingInput = false;
+  }
+
+  isFormValid (): boolean {
+    if (this.categoryForm.valid) {
+      if (this.isCategoryNameUnique()) {
+        return true;
+      }
+      else this.snackbarService.showMessage("This category name already exists", AlertTypes.ERROR);
+    }
+    else this.categoryForm.markAllAsTouched();
+
+    return false;
+  }
+
+  uploadImage (): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.imageUploadService.uploadImageToFolder(ImageFolders.CATEGORIES, this.pictureToSave as File).then((storageInfo) => { 
+        resolve(storageInfo);       
+      //   this.categoryForm.patchValue({
+      //     imagePath: storageInfo.metadata.fullPath
+      //  });
+      }).catch(error => {
+        reject(error);
+      })
+    })
+    
+  }
+
+  isCategoryNameUnique () {
+    return this.categories.find((category: Category) => {
+      return category.name == this.categoryForm.value;
+    }) == undefined;
+  }
+
+  resetForm () {
+    this.categoryForm.reset();
+    this.editCategoryId = null;
+  }
+
+  refresh() {
+    this.categoryModal?.close();
+    this.getCategories();
+    this.categoryForm.reset();
+    this.pictureToSave = null;
+    this.editCategoryId = null;
+    this.processingInput = false;
   }
 }

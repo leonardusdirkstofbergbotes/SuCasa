@@ -8,14 +8,14 @@ import { Component, Output, EventEmitter, Input } from '@angular/core';
 export class AddPictureComponent {
 
   profilePictureFile: any = '';
-  profilePicturePreviewUrl: string = '';
+  @Input() picturePreviewUrl: string = '';
   @Output() fileChanged = new EventEmitter<File>;
 
   createPreviewUrl (event: any) {
     const file = event.target?.files[0];
     const reader = new FileReader();
     reader.onload = () => {
-      this.profilePicturePreviewUrl = reader.result as string;
+      this.picturePreviewUrl = reader.result as string;
     }
     reader.readAsDataURL(file);
 

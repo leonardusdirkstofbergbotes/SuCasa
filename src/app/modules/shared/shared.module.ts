@@ -1,4 +1,4 @@
-import { GeolocationService } from './services/geolocation.service';
+import { ScriptInjectorService } from './services/script-injector.service';
 import { SnackBarComponent } from './components/snack-bar/snack-bar.component';
 import { ButtonGroupComponent } from './components/button-group/button-group.component';
 import { FormTabsComponent } from './components/form/components/form-tabs/form-tabs.component';
@@ -12,6 +12,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ModalComponent } from './components/modal/modal.component';
 import { AddPictureComponent } from './components/add-picture/add-picture.component';
 import { ToggleButtonComponent } from './components/toggle-button/toggle-button.component';
+import { GoogleMapsModule } from '@angular/google-maps';
+import { GoogleMapComponent } from './components/google-map/google-map.component';
 
 @NgModule({
   declarations: [
@@ -24,14 +26,16 @@ import { ToggleButtonComponent } from './components/toggle-button/toggle-button.
     ModalComponent,
     AddPictureComponent,
     ToggleButtonComponent,
+    GoogleMapComponent,
   ],
   imports: [
     CommonModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    GoogleMapsModule
   ],
   providers: [
-    GeolocationService
+    ScriptInjectorService
   ],
   exports: [
     ButtonComponent,
@@ -42,7 +46,8 @@ import { ToggleButtonComponent } from './components/toggle-button/toggle-button.
     SnackBarComponent,
     ModalComponent,
     AddPictureComponent,
-    ToggleButtonComponent
+    ToggleButtonComponent,
+    GoogleMapComponent
   ]
 })
 export class SharedModule { }
