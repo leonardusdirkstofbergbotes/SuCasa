@@ -18,6 +18,24 @@
             color: $error-light;
             font-weight: bold;
         }
+
+        .required-indicator {
+            color: $error-light;
+
+            &.optional {
+                color: $grey-light;
+                font-size: 0.7rem;
+            }
+        }
+    }
+
+    .max-word-counter {
+        font-size: 0.6rem;
+        color: $error-light;
+        position: absolute;
+        top: 0.5rem;
+        right: 0.4rem;
+        font-weight: bold;
     }
 
     input, textarea {

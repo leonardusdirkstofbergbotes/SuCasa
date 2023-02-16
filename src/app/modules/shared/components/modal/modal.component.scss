@@ -3,7 +3,7 @@
 @use 'src/styles/general' as *;
 
 .modal {
-    @include shadow;
+    @include shadow-large;
     border-radius: $border-radius;
     width: 95%;
 
@@ -19,12 +19,13 @@
             max-height: 100rem;
             opacity: 1;
             padding: 1rem;
-            background-color: $grey-light-transparent;
+            background-color: $grey-dark-transparent;
             position: fixed;
             top: 0;
             bottom: 0;
+            left: 0;
+            right: 0;
             z-index: 2;
-            width: 100%;
         }
     }
 

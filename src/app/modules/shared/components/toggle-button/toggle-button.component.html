@@ -1,7 +1,9 @@
 <div class="toggle__wrapper">
     <label [class.error]="control.invalid && control.touched">{{label}}</label>
     <div class="toggle" (click)="toggleSwitch()" [class.active]="control.value">
-        <div class="switch" [class.active]="control.value"></div>
+        <div class="switch" [class.active]="control.value">
+            <i class="fa-solid" [ngClass]="{'fa-check': control.value, 'fa-xmark': !control.value}"></i>
+        </div>
         <input type="hidden" [formControl]="control" />
     </div>
     <small *ngIf="control.invalid && control.touched">

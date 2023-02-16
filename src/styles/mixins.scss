@@ -11,6 +11,12 @@
     box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.07);
 }
 
+@mixin shadow-large() {
+    -webkit-box-shadow: 0px 10px 10px 5px rgb(0 0 0 / 20%);;
+    -moz-box-shadow: 0px 10px 10px 5px rgb(0 0 0 / 20%);;
+    box-shadow: 0px 10px 10px 5px rgb(0 0 0 / 20%);;
+}
+
 // Transitions
 @mixin transition($transition...) {
     -moz-transition: $transition;

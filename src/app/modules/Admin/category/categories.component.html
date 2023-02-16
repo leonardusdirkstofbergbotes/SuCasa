@@ -1,7 +1,7 @@
 <h1>Categories</h1>
 
 <div>
-    <app-button (click)="categoryModal.open()">Create new category</app-button>
+    <app-button (click)="categoryModal.open()">Create new</app-button>
 </div>
 
 <app-modal [loading]="fetchingFormInfo" (closed)="resetForm()" [title]="editCategoryId != null ? 'Update category' : 'Create new category'" #categoryModal>
@@ -9,6 +9,8 @@
         <app-add-picture [picturePreviewUrl]="categoryForm.controls['imagePath'].value" (fileChanged)="pictureChanged($event)"></app-add-picture>
         <app-input label="Name" [control]="categoryForm.controls['name']" type="text"></app-input>
         <app-input label="Description" [control]="categoryForm.controls['description']" rows="4" type="textarea"></app-input>
+        <app-input label="Active until" [control]="categoryForm.controls['activeUntil']" type="date"></app-input>
+        <app-input label="Daily cutoff time" [control]="categoryForm.controls['dailyCutoffTime']" type="time"></app-input>
         <app-toggle-button label="Promote" [control]="categoryForm.controls['promote']"></app-toggle-button>
     </div>
     <div class="footer">

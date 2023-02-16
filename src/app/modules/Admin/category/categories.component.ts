@@ -1,4 +1,3 @@
-import { get } from 'firebase/database';
 import { ImageFolders } from './../../../enums/ImageFolder';
 import { ImageUploadService } from './../../shared/services/image-upload.service';
 import { SnackBarService } from './../../shared/components/snack-bar/snack-bar.service';
@@ -24,8 +23,8 @@ export class CategoriesComponent implements OnInit {
 
   categories: Category[] = [];
   categoryForm: FormGroup = new FormGroup({
-    name: new FormControl("", [Validators.required, Validators.minLength(2), Validators.maxLength(20)]),
-    description: new FormControl("", [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
+    name: new FormControl("", [Validators.required, Validators.minLength(2), Validators.maxLength(40)]),
+    description: new FormControl("", [Validators.required, Validators.minLength(2), Validators.maxLength(150)]),
     imagePath: new FormControl(null, [Validators.maxLength(1000)]),
     active: new FormControl(true, [Validators.required]),
     activeUntil: new FormControl(null),
@@ -162,7 +161,7 @@ export class CategoriesComponent implements OnInit {
 
   isCategoryNameUnique () {
     if (this.editCategoryId != null) return true;
-    
+
     return this.categories.find((category: Category) => {
       console.log(this.categoryForm.value);
       return category.name == this.categoryForm.get('name')?.value;

@@ -1,4 +1,4 @@
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { Component, Input } from '@angular/core';
 
 @Component({
@@ -16,4 +16,5 @@ export class InputComponent {
   @Input() type: string = "text";
   @Input() autocomplete: boolean = false;
   @Input() rows: number = 2;
+  Validators = Validators;
 }

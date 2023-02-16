@@ -40,6 +40,7 @@ label {
     }
 
     .switch {
+        @include flexcenter;
         @include transition(background-color 0.3s ease-in-out, transform 0.3s ease-in-out);
         height: 1.2rem;
         width: 1.2rem;
@@ -47,6 +48,8 @@ label {
         border-radius: 100%;
         background-color: $primary-light;
         transform: translateX(0);
+        color: white;
+        font-size: 0.6rem;
 
         &.active {
             background-color: $primary;

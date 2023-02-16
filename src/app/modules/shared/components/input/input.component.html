@@ -1,9 +1,13 @@
 <div class="input">
-    <label [class.error]="control.invalid && control.touched">{{label}}</label>
+    <label [class.error]="control.invalid && control.touched">
+        {{label}}
+        <span class="required-indicator" [class.optional]="!control.hasValidator(Validators.required)">{{ control.hasValidator(Validators.required) ? '*' : '(optional)' }}</span>
+    </label>
     <input *ngIf="type != 'textarea'" [autocomplete]="!autocomplete ? 'off' : 'on'" [formControl]="control" [type]="type" [class.error]="control.invalid && control.touched"> 
-    <textarea [rows]="rows" *ngIf="type == 'textarea'" [autocomplete]="!autocomplete ? 'off' : 'on'" [formControl]="control" [class.error]="control.invalid && control.touched">
+    <textarea [rows]="rows" *ngIf="type == 'textarea'" [autocomplete]="!autocomplete ? 'off' : 'on'" [formControl]="control" [class.error]="control.invalid && control.touched"></textarea>
 
-    </textarea>
+    <div class="max-word-counter" *ngIf="control.hasError('maxlength')">{{control.value.length}} / {{ control.errors?.['maxlength'].requiredLength }}</div>
+
     <small *ngIf="control.invalid && control.touched">
         <div *ngIf="control.hasError('required')">Please make sure this field above is filled in</div>
         <div *ngIf="control.hasError('minlength')">This field needs to be at least {{ control.errors?.['minlength'].requiredLength }} characters long</div>
