@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/su-casa",
+            "outputPath": "dist/Su-Casa/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -98,6 +98,60 @@
             ],
             "scripts": []
           }
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/Su-Casa/server",
+            "main": "server.ts",
+            "tsConfig": "tsconfig.server.json",
+            "inlineStyleLanguage": "scss"
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media"
+            },
+            "development": {
+              "optimization": false,
+              "sourceMap": true,
+              "extractLicenses": false,
+              "vendorChunk": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "configurations": {
+            "development": {
+              "browserTarget": "Su-Casa:build:development",
+              "serverTarget": "Su-Casa:server:development"
+            },
+            "production": {
+              "browserTarget": "Su-Casa:build:production",
+              "serverTarget": "Su-Casa:server:production"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "routes": [
+              "/"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "Su-Casa:build:production",
+              "serverTarget": "Su-Casa:server:production"
+            },
+            "development": {
+              "browserTarget": "Su-Casa:build:development",
+              "serverTarget": "Su-Casa:server:development"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     }
