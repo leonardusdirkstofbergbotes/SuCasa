@@ -45,7 +45,7 @@ export class CategoryService {
   formatCategories(categories: any): Category[] {
     let formattedCategories: Category[] = [];
 
-    Object.keys(categories).forEach(async uid => {
+    Object.keys(categories).forEach(async id => {
       let imagePath: string = DefaultImages.CATEGORIES;
 
       // if (categories[uid].imagePath) {
@@ -54,7 +54,7 @@ export class CategoryService {
       //   });
       // }
 
-      formattedCategories.push({...categories[uid], uid: uid, imagePath: imagePath});
+      formattedCategories.push({...categories[id], id: id, imagePath: imagePath});
     });
     
     return formattedCategories;

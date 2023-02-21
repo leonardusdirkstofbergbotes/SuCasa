@@ -7,6 +7,7 @@ import { CategoryService } from './../../shared/services/category-service.servic
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Category } from 'src/app/models/category';
 import { AlertTypes } from 'src/app/enums/AlertTypes';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-categories',
@@ -20,6 +21,7 @@ export class CategoriesComponent implements OnInit {
   fetchingFormInfo: boolean = false;
   fetchingInitialData: boolean = false;
   processingInput: boolean = false;
+  subscription: Subscription = new Subscription();
 
   categories: Category[] = [];
   categoryForm: FormGroup = new FormGroup({
@@ -46,22 +48,27 @@ export class CategoriesComponent implements OnInit {
   } 
 
   getCategories () {
-    this.categoryService.getAllCategories().subscribe(data => {
-      this.categories = this.categoryService.formatCategories(data);
-    })
+    this.subscription.add(
+      this.categoryService.getAllCategories().subscribe(data => {
+        this.categories = this.categoryService.formatCategories(data);
+      })
+    );
   }
 
   pictureChanged (file: File) {
     this.pictureToSave = file;
   }
 
-  async createNewCategory () {
+  createNewCategory () {
     this.processingInput = true;
     if (this.isFormValid()) {
 
-      this.categoryService.createNewCategory(this.pictureToSave as File).subscribe(newCategoryId => {
-        console.log(newCategoryId);
-      });
+      this.subscription.add(
+        this.categoryService.createNewCategory(this.pictureToSave as File).subscribe(newCategoryDetails => {
+          console.log(newCategoryDetails);
+          this.snackbarService.showMessage('New category added', AlertTypes.SUCCESS);
+        })
+      );
     }
     else this.processingInput = false;
   }
@@ -76,11 +83,13 @@ export class CategoriesComponent implements OnInit {
     this.categoryModal.open();
     this.fetchingFormInfo = true;
 
-    this.categoryService.getCategory(categoryId).subscribe(categoryData => {
-      this.editCategoryId = categoryId;
-      this.categoryForm.patchValue(categoryData);
-      this.fetchingFormInfo = false;
-    });
+    this.subscription.add(
+      this.categoryService.getCategory(categoryId).subscribe(categoryData => {
+        this.editCategoryId = categoryId;
+        this.categoryForm.patchValue(categoryData);
+        this.fetchingFormInfo = false;
+      })
+    );
   }
 
   async updateCategory () {
@@ -131,13 +140,16 @@ export class CategoriesComponent implements OnInit {
     })
   }
 
-  async deleteCategory (categoryId: string) {
-    const confirmDelete = confirm("Are you sure you want to delete this category");
-
+  deleteCategory (categoryId: string) {
     this.fetchingInitialData = true;
     this.categoryService.deleteCategory(categoryId).subscribe(() => {
-      console.log('delete complete');
+      // remove the category from categories array
+      this.categories = this.categories.filter((category: Category) => {
+        return category.id != categoryId;
+      });
+      
       this.fetchingInitialData = false;
+      this.snackbarService.showMessage('Category deleted', AlertTypes.SUCCESS);
     });
   }
 

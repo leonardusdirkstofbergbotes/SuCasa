@@ -4,5 +4,6 @@ export interface Category {
     description: string,
     imagePath: string,
     name: string,
-    promote: boolean
+    promote: boolean,
+    id: string;
 }
