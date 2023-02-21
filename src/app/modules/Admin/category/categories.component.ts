@@ -48,9 +48,14 @@ export class CategoriesComponent implements OnInit {
   } 
 
   getCategories () {
+    this.fetchingInitialData = true;
     this.subscription.add(
       this.categoryService.getAllCategories().subscribe(data => {
-        this.categories = this.categoryService.formatCategories(data);
+        if (data != null) {
+          this.categories = this.categoryService.formatCategories(data);
+        }
+
+        this.fetchingInitialData = false;
       })
     );
   }
@@ -64,9 +69,11 @@ export class CategoriesComponent implements OnInit {
     if (this.isFormValid()) {
 
       this.subscription.add(
-        this.categoryService.createNewCategory(this.pictureToSave as File).subscribe(newCategoryDetails => {
+        this.categoryService.createNewCategory(this.categoryForm.value, this.pictureToSave as File).subscribe(newCategoryDetails => {
           console.log(newCategoryDetails);
+          this.categories.push(newCategoryDetails);
           this.snackbarService.showMessage('New category added', AlertTypes.SUCCESS);
+          this.processingInput = false
         })
       );
     }

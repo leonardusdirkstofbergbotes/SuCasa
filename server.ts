@@ -39,14 +39,26 @@ const storage = getStorage(firebase);
 export function app(): express.Express {
   const server = express();
   const cors = require('cors');
-  const fileUpload = require('express-fileupload');
-  const path = require('path');
+  const multer = require('multer');
   const distFolder = join(process.cwd(), 'dist/Su-Casa/browser');
   const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
   const corsOptions = {
     origin: 'http://localhost:4200',
     optionsSuccessStatus: 200 // For legacy browser support
   };
+  const storage = multer.diskStorage({
+    destination: function (req:any, file:any, cb:any) {
+      cb(null, 'src/assets/images/categories')
+    },
+    filename: function (req:any, file:any, cb:any) {
+      let extArray = file.mimetype.split("/");
+      let extension = extArray[extArray.length - 1];
+
+      cb(null, file.originalname) //Appending .jpg
+    }
+  })
+  
+  var upload = multer({ storage: storage });
   const db = getDatabase();
 
   // Our Universal express-engine (found @ https://github.com/angular/universal/tree/main/modules/express-engine)
@@ -63,35 +75,23 @@ export function app(): express.Express {
   // CATEGORIES END POINTS
 
   // POST categories {formdata}
-  server.post('/api/categories', (req: any, res: any) => {
-    const pictureToSave = req.body.pictureToSave;
+  server.post('/api/categories', upload.single('file'), (req: any, res: any) => {
     let storagePath: string = DefaultImages.CATEGORIES;
-
-    if (pictureToSave != null) {
-      // save file first and get storage path. 
-      const fileToSave = path.join(__dirname, 'assests', 'images', 'categories', `${pictureToSave.name}`);
-
-      pictureToSave.mv(fileToSave, (error: any) => {
-        if (error) {
-          return res.status(500).send(error);
-        }
-        else {
-          storagePath = fileToSave;
-        }
-      });
-    };
-
-    const formData = {
-      ...req.body,
-      imagePath: storagePath
-    };
-  
     const uniqueId = Math.floor(Date.now() + Math.random());
-    set(ref(db, 'categories/' + uniqueId), formData).then(() => {
-      res.status(200).send({
-        id: uniqueId.toString(),
-        storagePath: storagePath
-      });
+
+    if (req.file) {
+      console.log(req.file);
+      storagePath = req.file.path;
+    }
+
+    const newCategory = {
+      ...JSON.parse(req.body.formData),
+      imagePath: storagePath,
+      id: uniqueId
+    };
+    
+    set(ref(db, 'categories/' + uniqueId), newCategory).then(() => {
+      res.status(200).send(newCategory);
     }).catch(error => {
       res.status(400).send(error);
     });

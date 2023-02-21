@@ -18,12 +18,12 @@ export class CategoryService {
     private http: HttpClient
   ) {}
 
-  createNewCategory(pictureToSave: File): Observable<any> {
-    return this.http.post(`${this.baseUrl}/api/categories`, pictureToSave, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    });
+  createNewCategory(categoryInputs: any, fileToSave: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', fileToSave);
+    formData.append('formData', JSON.stringify(categoryInputs));
+
+    return this.http.post(`${this.baseUrl}/api/categories`, formData);
   }
 
   updateCategory(categoryId: string, formValues: Category): Promise<void> {
@@ -46,14 +46,7 @@ export class CategoryService {
     let formattedCategories: Category[] = [];
 
     Object.keys(categories).forEach(async id => {
-      let imagePath: string = DefaultImages.CATEGORIES;
-
-      // if (categories[uid].imagePath) {
-      //   await this.imageUploaderService.downloadImageFromPath(categories[uid].imagePath).then((downloadUrl: string) => {
-      //     imagePath = downloadUrl;
-      //   });
-      // }
-
+      const imagePath = categories[id].imagePath.replace(/\\/g, "/").replace('src/', '');
       formattedCategories.push({...categories[id], id: id, imagePath: imagePath});
     });
     
