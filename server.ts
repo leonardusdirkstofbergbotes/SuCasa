@@ -1,3 +1,4 @@
+import { DefaultImages } from './src/app/enums/DefaultImages';
 import 'zone.js/node';
 
 import { FIREBASE } from './src/app/configs/keys';
@@ -9,10 +10,10 @@ import { join } from 'path';
 
 import { AppServerModule } from './src/main.server';
 import { initializeApp } from "firebase/app";
-import { getDatabase } from "firebase/database";
+import { getDatabase, ref, set, get, child, remove } from "firebase/database";
 import { getStorage } from "firebase/storage";
 import { getAuth } from "firebase/auth";
-import { ref, set, get, child, remove } from 'firebase/database';
+
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -38,6 +39,8 @@ const storage = getStorage(firebase);
 export function app(): express.Express {
   const server = express();
   const cors = require('cors');
+  const fileUpload = require('express-fileupload');
+  const path = require('path');
   const distFolder = join(process.cwd(), 'dist/Su-Casa/browser');
   const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
   const corsOptions = {
@@ -54,16 +57,41 @@ export function app(): express.Express {
   server.set('view engine', 'html');
   server.set('views', distFolder);
   server.use(cors(corsOptions));
+  server.use(express.json());
+  server.use(express.urlencoded({extended: true})); 
 
   // CATEGORIES END POINTS
 
   // POST categories {formdata}
   server.post('/api/categories', (req: any, res: any) => {
-    // save file first. 
+    const pictureToSave = req.body.pictureToSave;
+    let storagePath: string = DefaultImages.CATEGORIES;
 
+    if (pictureToSave != null) {
+      // save file first and get storage path. 
+      const fileToSave = path.join(__dirname, 'assests', 'images', 'categories', `${pictureToSave.name}`);
+
+      pictureToSave.mv(fileToSave, (error: any) => {
+        if (error) {
+          return res.status(500).send(error);
+        }
+        else {
+          storagePath = fileToSave;
+        }
+      });
+    };
+
+    const formData = {
+      ...req.body,
+      imagePath: storagePath
+    };
+  
     const uniqueId = Math.floor(Date.now() + Math.random());
-    set(ref(db, 'categories/' + uniqueId), req.params.formData).then(() => {
-      res.status(200).send();
+    set(ref(db, 'categories/' + uniqueId), formData).then(() => {
+      res.status(200).send({
+        id: uniqueId.toString(),
+        storagePath: storagePath
+      });
     }).catch(error => {
       res.status(400).send(error);
     });
@@ -88,8 +116,9 @@ export function app(): express.Express {
   });
 
   // DELETE category {categoryId}
-  server.delete('api/categories/:categoryId', (req: any, res: any) => {
+  server.delete('/api/categories/:categoryId', (req: any, res: any) => {
     remove(ref(db, `categories/${req.params.categoryId}`)).then(() => {
+      // also delete the file if it exists and its not the default image;
       res.status(200).send();
     }).catch(error => {
       res.status(400).send(error);

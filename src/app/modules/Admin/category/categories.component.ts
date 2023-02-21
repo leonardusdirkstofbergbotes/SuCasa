@@ -45,16 +45,10 @@ export class CategoriesComponent implements OnInit {
     this.getCategories();
   } 
 
-  async getCategories () {
-    this.fetchingInitialData = true;
-    await this.categoryService.getAllCategories().then((categories: Category[]) => {
-      this.categories = categories;
-      console.log(this.categories);
-    }).catch((error) => {
-      console.log(error);
-    });
-
-    this.fetchingInitialData = false;
+  getCategories () {
+    this.categoryService.getAllCategories().subscribe(data => {
+      this.categories = this.categoryService.formatCategories(data);
+    })
   }
 
   pictureChanged (file: File) {
@@ -64,36 +58,27 @@ export class CategoriesComponent implements OnInit {
   async createNewCategory () {
     this.processingInput = true;
     if (this.isFormValid()) {
-      if (this.pictureToSave != null) {
-        await this.uploadImage().then(storageInfo => {
-          this.categoryForm.patchValue({
-            imagePath: storageInfo.metadata.fullPath
-          });
-        });
-      }
 
-      await this.categoryService.createNewCategory(this.categoryForm.value).then(() => {
-        this.refresh();
-      }).catch((error) => {
-        console.log('error occured');
+      this.categoryService.createNewCategory(this.pictureToSave as File).subscribe(newCategoryId => {
+        console.log(newCategoryId);
       });
     }
     else this.processingInput = false;
   }
 
+  async fileToBlob (file: File): Promise<Blob>  {
+    return new Blob([new Uint8Array(await file.arrayBuffer())], {type: file.type });
+  }
+  
+
   editCategory(categoryId: string) {
-    // this.categoryForm.reset();
+    this.categoryForm.reset();
     this.categoryModal.open();
     this.fetchingFormInfo = true;
 
-    this.categoryService.getCategory(categoryId).then((category: Category | null) => {
-      if (category == null) {
-        this.snackbarService.showMessage("We could not find the category", AlertTypes.ERROR);
-        return;
-      }
-
+    this.categoryService.getCategory(categoryId).subscribe(categoryData => {
       this.editCategoryId = categoryId;
-      this.categoryForm.patchValue(category);
+      this.categoryForm.patchValue(categoryData);
       this.fetchingFormInfo = false;
     });
   }
@@ -102,19 +87,19 @@ export class CategoriesComponent implements OnInit {
     this.processingInput = true;
     if (this.isFormValid()) {
       // check if image has been updated
-      if (this.pictureToSave != null) {
-        await this.uploadImage().then(storageInfo => {
-          this.categoryForm.patchValue({
-            imagePath: storageInfo.metadata.fullPath
-          });
-        });
-      }
+      // if (this.pictureToSave != null) {
+      //   await this.uploadImage().then(storageInfo => {
+      //     this.categoryForm.patchValue({
+      //       imagePath: storageInfo.metadata.fullPath
+      //     });
+      //   });
+      // }
 
-      await this.categoryService.updateCategory(this.editCategoryId as string, this.categoryForm.value).then(() => {
-        this.refresh();
-      }).catch((error) => {
-        console.log('error occured');
-      });
+      // await this.categoryService.updateCategory(this.editCategoryId as string, this.categoryForm.value).then(() => {
+      //   this.refresh();
+      // }).catch((error) => {
+      //   console.log('error occured');
+      // });
     }
     else this.processingInput = false;
   }
@@ -150,20 +135,16 @@ export class CategoriesComponent implements OnInit {
     const confirmDelete = confirm("Are you sure you want to delete this category");
 
     this.fetchingInitialData = true;
-    if (confirmDelete) {
-      await this.categoryService.deleteCategory(categoryId).then(() => {
-        this.refresh();
-      });
-    }
-
-    this.fetchingInitialData = false;
+    this.categoryService.deleteCategory(categoryId).subscribe(() => {
+      console.log('delete complete');
+      this.fetchingInitialData = false;
+    });
   }
 
   isCategoryNameUnique () {
     if (this.editCategoryId != null) return true;
 
     return this.categories.find((category: Category) => {
-      console.log(this.categoryForm.value);
       return category.name == this.categoryForm.get('name')?.value;
     }) == undefined;
   }

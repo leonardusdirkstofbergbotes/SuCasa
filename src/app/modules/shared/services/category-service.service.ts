@@ -1,8 +1,10 @@
-import { ImageUploadService } from './image-upload.service';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { DefaultImages } from './../../../enums/DefaultImages';
 import { Injectable } from '@angular/core';
 import { getDatabase, ref, set, get, child, remove } from 'firebase/database';
 import { Category } from 'src/app/models/category';
+import { SITESETTINGS } from 'src/app/configs/site-settings';
 
 @Injectable({
   providedIn: 'root',
@@ -10,57 +12,34 @@ import { Category } from 'src/app/models/category';
 export class CategoryService {
 
   private db = getDatabase();
+  private baseUrl: string = SITESETTINGS.baseUrl;
 
-  constructor (private imageUploaderService: ImageUploadService) {}
+  constructor (
+    private http: HttpClient
+  ) {}
 
-  createNewCategory(formValues: Category): Promise<void> {
-    const uniqueId = Math.floor(Date.now() + Math.random());
-    return set(ref(this.db, 'categories/' + uniqueId), formValues);
+  createNewCategory(pictureToSave: File): Observable<any> {
+    return this.http.post(`${this.baseUrl}/api/categories`, pictureToSave, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
   }
 
   updateCategory(categoryId: string, formValues: Category): Promise<void> {
     return set(ref(this.db, `categories/${categoryId}`), formValues);
   }
 
-  getAllCategories (): Promise<Category[]> {
-    return new Promise((resolve, reject) => {
-      get(child(ref(this.db), 'categories/')).then((snapshot) => {
-        if (snapshot.exists()) {
-          let formattedCategories: Category[] = this.formatCategories(snapshot.val());
-          resolve(formattedCategories);
-        } else {
-          resolve([] as any);
-        }
-      }).catch((error) => {
-        reject(error);
-      });
-    })
+  getAllCategories (): Observable<any> {
+    return this.http.get(`${this.baseUrl}/api/categories`);
   }
 
-  getCategory (categoryId: string): Promise<Category | null> {
-    return new Promise((resolve, reject) => {
-      get(child(ref(this.db), `categories/${categoryId}`)).then(async (snapshot) => {
-        if (snapshot.exists()) {
-          const categoryDetails = {...snapshot.val(), uid: categoryId};
-
-          if (categoryDetails.imagePath) {
-            await this.imageUploaderService.downloadImageFromPath(categoryDetails.imagePath).then(downloadUrl => {
-              categoryDetails.imagePath = downloadUrl;
-            });
-          }
-
-          resolve(categoryDetails);
-        } else {
-          resolve(null);
-        }
-      }).catch((error) => {
-        reject(error);
-      });
-    });
+  getCategory (categoryId: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/api/categories/${categoryId}`);
   }
 
   deleteCategory (categoryId: string) {
-    return remove(ref(this.db, `categories/${categoryId}`));
+    return this.http.delete(`${this.baseUrl}/api/categories/${categoryId}`);
   }
 
   formatCategories(categories: any): Category[] {
@@ -69,11 +48,11 @@ export class CategoryService {
     Object.keys(categories).forEach(async uid => {
       let imagePath: string = DefaultImages.CATEGORIES;
 
-      if (categories[uid].imagePath) {
-        await this.imageUploaderService.downloadImageFromPath(categories[uid].imagePath).then((downloadUrl: string) => {
-          imagePath = downloadUrl;
-        });
-      }
+      // if (categories[uid].imagePath) {
+      //   await this.imageUploaderService.downloadImageFromPath(categories[uid].imagePath).then((downloadUrl: string) => {
+      //     imagePath = downloadUrl;
+      //   });
+      // }
 
       formattedCategories.push({...categories[uid], uid: uid, imagePath: imagePath});
     });
