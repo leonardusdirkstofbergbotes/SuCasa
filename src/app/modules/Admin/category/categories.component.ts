@@ -148,6 +148,7 @@ export class CategoriesComponent implements OnInit {
   }
 
   deleteCategory (categoryId: string) {
+    console.log('delete ', categoryId);
     this.fetchingInitialData = true;
     this.categoryService.deleteCategory(categoryId).subscribe(() => {
       // remove the category from categories array

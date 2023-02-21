@@ -46,6 +46,8 @@ export class CategoryService {
     let formattedCategories: Category[] = [];
 
     Object.keys(categories).forEach(async id => {
+
+      // paths are returned with '\' instead of '/' and we need to remove the 'src/' from the path
       const imagePath = categories[id].imagePath.replace(/\\/g, "/").replace('src/', '');
       formattedCategories.push({...categories[id], id: id, imagePath: imagePath});
     });

@@ -80,7 +80,6 @@ export function app(): express.Express {
     const uniqueId = Math.floor(Date.now() + Math.random());
 
     if (req.file) {
-      console.log(req.file);
       storagePath = req.file.path;
     }
 
