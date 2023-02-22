@@ -8,6 +8,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Category } from 'src/app/models/category';
 import { AlertTypes } from 'src/app/enums/AlertTypes';
 import { Subscription } from 'rxjs';
+import { TransferState, makeStateKey } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-categories',
@@ -22,6 +23,8 @@ export class CategoriesComponent implements OnInit {
   fetchingInitialData: boolean = false;
   processingInput: boolean = false;
   subscription: Subscription = new Subscription();
+  
+  CATEGORIESTEST = makeStateKey<any>('categoriesTest');
 
   categories: Category[] = [];
   categoryForm: FormGroup = new FormGroup({
@@ -40,7 +43,8 @@ export class CategoriesComponent implements OnInit {
   constructor (
     private categoryService: CategoryService,
     private imageUploadService: ImageUploadService,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    private state: TransferState
   ) {}
 
   ngOnInit (): void {
@@ -48,16 +52,34 @@ export class CategoriesComponent implements OnInit {
   } 
 
   getCategories () {
-    this.fetchingInitialData = true;
-    this.subscription.add(
-      this.categoryService.getAllCategories().subscribe(data => {
-        if (data != null) {
-          this.categories = this.categoryService.formatCategories(data);
-        }
 
-        this.fetchingInitialData = false;
-      })
-    );
+    this.fetchingInitialData = true;
+    if (this.state.hasKey(this.CATEGORIESTEST)) {
+      this.categories = this.categoryService.formatCategories(this.state.get(this.CATEGORIESTEST, []));
+      this.fetchingInitialData = false;
+    }
+    else {
+      this.subscription.add(
+          this.categoryService.getAllCategories().subscribe(data => {
+            if (data != null) {
+              this.state.set(this.CATEGORIESTEST, data);
+              console.log('ready');
+            }
+              
+            this.fetchingInitialData = false;
+          })
+        );
+    }
+    // this.fetchingInitialData = true;
+    // this.subscription.add(
+    //   this.categoryService.getAllCategories().subscribe(data => {
+    //     if (data != null) {
+    //       this.categories = this.categoryService.formatCategories(data);
+    //     }
+
+    //     this.fetchingInitialData = false;
+    //   })
+    // );
   }
 
   pictureChanged (file: File) {

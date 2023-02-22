@@ -8,12 +8,13 @@ function bootstrap() {
   .catch(err => console.error(err));
   };
 
+  document.addEventListener('DOMContentLoaded', bootstrap);
 
- if (document.readyState === 'complete') {
-   bootstrap();
- } else {
-   document.addEventListener('DOMContentLoaded', bootstrap);
- }
+//  if (document.readyState === 'complete') {
+//    bootstrap();
+//  } else {
+//    document.addEventListener('DOMContentLoaded', bootstrap);
+//  }
  
 
   // Import the functions you need from the SDKs you need
